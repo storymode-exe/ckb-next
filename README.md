@@ -24,12 +24,12 @@ Previously, unchecking "Switch to mode" and clicking Apply would leave the old b
 
 The combination of these two options enables **hold-to-shift** — a key that temporarily shifts to a different mode while held, and reverts when released:
 
-**Mode A** — bind your key to:
-- Switch to Mode B
+**Mode 1** — bind your key to:
+- Switch to Mode 2
 - ✅ Retain original key function
 
-**Mode B** — bind the same key to:
-- Switch to Mode A
+**Mode 2** — bind the same key to:
+- Switch to Mode 1
 - ✅ Trigger on release
 - ✅ Retain original key function
 
