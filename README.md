@@ -1,4 +1,4 @@
-# ckb-next — Mode Shift Fork
+# ckb-next — Mode Shift Enhanced Fork
 
 A fork of [ckb-next](https://github.com/ckb-next/ckb-next) adding **hold-to-shift mode** functionality to the Special binding tab.
 
@@ -33,7 +33,7 @@ The combination of these two options enables **hold-to-shift** — a key that te
 - ✅ Trigger on release
 - ✅ Retain original key function
 
-Now holding the key shifts to Mode B. Releasing it shifts back to Mode A. The key still works normally the whole time.
+Now holding the key shifts to Mode 2. Releasing it shifts back to Mode 1. The key still works normally the whole time. You can set both Modes to look identical, but have some new keys color change in Mode 2, for games that support modifier keys, such as Star Citizen, or other MMOs.
 
 ### Star Citizen Example
 - **Mode 1** — Default SC lighting
