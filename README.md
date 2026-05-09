@@ -1,4 +1,4 @@
-# ckb-next — Mode Shift Enhanced Fork
+# ckb-next — Mode Shift Fork
 
 A fork of [ckb-next](https://github.com/ckb-next/ckb-next) adding **hold-to-shift mode** functionality to the Special binding tab.
 
@@ -85,7 +85,21 @@ Hold Alt → flight mode colors. Release → back to normal. Alt still works in-
 
 > **Note:** This is an x86_64 binary built on Fedora 43. It should work on most modern Linux distros. The ckb-next **daemon** from your distro's package is still required and does not need to be replaced.
 
-> **Bazzite/Fedora Atomic users:** `/usr/bin` is immutable. Copy the binary to `~/.local/bin/ckb-next` instead and update your autostart entry.
+>  **Bazzite/Fedora Atomic users:** `/usr/bin` is immutable. Follow these steps instead:
+> ```bash
+> # 1. Copy binary to local bin
+> cp ckb-next ~/.local/bin/ckb-next
+> chmod +x ~/.local/bin/ckb-next
+>
+> # 2. Fix the start menu launcher
+> cp /usr/share/applications/ckb-next.desktop ~/.local/share/applications/ckb-next.desktop
+> sed -i 's|/usr/bin/ckb-next|/var/home/$USER/.local/bin/ckb-next|g' ~/.local/share/applications/ckb-next.desktop
+> update-desktop-database ~/.local/share/applications/
+>
+> # 3. Fix autostart
+> chmod u+w ~/.config/autostart/ckb-next.autostart.desktop
+> sed -i 's|/usr/bin/ckb-next|/var/home/$USER/.local/bin/ckb-next|g' ~/.config/autostart/ckb-next.autostart.desktop
+> ```
 
 ---
 
