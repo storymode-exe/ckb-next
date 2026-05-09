@@ -103,6 +103,49 @@ Hold Alt → flight mode colors. Release → back to normal. Alt still works in-
 
 ---
 
+## Option 2: Arch Linux (PKGBUILD)
+
+Builds from source using your system's own libraries — no version mismatch issues.
+
+```bash
+git clone https://github.com/storymode-exe/ckb-next
+cd ckb-next/packages
+makepkg -si
+```
+
+This installs everything including the daemon, autostart, and animations in the right places automatically.
+
+---
+
+## Option 3: Fedora / Bazzite (RPM)
+
+Build an RPM from the included SPEC file:
+
+```bash
+# Install build tools
+sudo dnf install -y rpm-build rpmdevtools
+
+# Set up build tree
+rpmdev-setuptree
+
+# Copy the spec file
+cp packages/ckb-next-modeshift.spec ~/rpmbuild/SPECS/
+
+# Download source
+spectool -g -R ~/rpmbuild/SPECS/ckb-next-modeshift.spec
+
+# Install build dependencies
+sudo dnf builddep ~/rpmbuild/SPECS/ckb-next-modeshift.spec
+
+# Build the RPM
+rpmbuild -ba ~/rpmbuild/SPECS/ckb-next-modeshift.spec
+
+# Install it
+sudo dnf install ~/rpmbuild/RPMS/x86_64/ckb-next-modeshift-*.rpm
+```
+
+---
+
 ## Building from Source
 
 ### Requirements
