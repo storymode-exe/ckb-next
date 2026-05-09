@@ -41,6 +41,11 @@ public:
     const static int MODE_PREV = -2, MODE_NEXT = -1;
     const static int MODE_PREV_WRAP = -4, MODE_NEXT_WRAP = -3;
     static QString  modeAction(int mode);
+    static QString  modeAction(int mode, bool passthrough = false);
+    static QString  modeReleaseAction(int mode, bool passthrough = false);
+    inline bool     isModeRelease()    const { return _value.startsWith("$moderelease:"); }
+    inline bool     isPassthrough()    const { return _value.endsWith(":pt"); }
+    // Mode shift — hold to temporarily switch mode, reverts on release
     // DPI action. 0 for sniper, 1 for first DPI, etc
     const static int DPI_CYCLE_UP = -4, DPI_CYCLE_DOWN = -3;
     const static int DPI_UP = -2, DPI_DOWN = -1;
@@ -100,6 +105,7 @@ public:
 
     ~KeyAction();
 private:
+    int _shiftPrevMode = -1;   // stores mode index to revert to on release    
     /// ccMSC: Don't copy key actions (the old one needs to be deleted first)
     /// frickler24: statement left as described, but copying is done in KbBind copy constructor
     inline void operator=(const KeyAction& rhs) {}

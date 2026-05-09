@@ -122,6 +122,8 @@ QString KeyAction::friendlyName(const KeyMap& map) const {
         default:
             return tr("Switch to mode %1").arg(suffix + 1);
         }
+    } else if(prefix == "$moderelease"){
+        return tr("Switch to mode %1 (on release)").arg(suffix + 1);
     } else if(prefix == "$dpi"){
         // Split off custom parameters (if any)
         int level = parts[1].split("+")[0].toInt();
@@ -172,8 +174,16 @@ QString KeyAction::friendlyName(const KeyMap& map) const {
     return tr("(Unknown)");
 }
 
-QString KeyAction::modeAction(int mode){
-    return QString("$mode:%1").arg(mode);
+QString KeyAction::modeAction(int mode, bool passthrough){
+    QString s = QString("$mode:%1").arg(mode);
+    if(passthrough) s += ":pt";
+    return s;
+}
+
+QString KeyAction::modeReleaseAction(int mode, bool passthrough){
+    QString s = QString("$moderelease:%1").arg(mode);
+    if(passthrough) s += ":pt";
+    return s;
 }
 
 QString KeyAction::dpiAction(int level, int customX, int customY){
@@ -301,6 +311,16 @@ void KeyAction::keyEvent(KbBind* bind, bool down){
         if(mode < 0 || mode >= modeCount)
             return;
         device->setCurrentMode(currentProfile->modes()[mode]);
+    } else if(prefix == "$moderelease"){
+        if(down)
+            return;
+        // Fire mode switch on key RELEASE instead of press
+        Kb* device = bind->devParent();
+        KbProfile* currentProfile = device->currentProfile();
+        int modeCount = currentProfile->modeCount();
+        int mode = suffix;
+        if(mode >= 0 && mode < modeCount)
+            device->setCurrentMode(currentProfile->modes()[mode]);
     } else if(prefix == "$dpi"){
         KbPerf* perf = bind->perf();
         int level = parts[1].split("+")[0].toInt();

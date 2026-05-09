@@ -60,6 +60,7 @@ private slots:
     void on_wheelButton_clicked(bool checked);
     void on_dpiButton_clicked(bool checked);
     void on_modeButton_clicked(bool checked);
+    void on_modeReleaseBox_stateChanged(int state);
     void on_lightButton_clicked(bool checked);
     void on_lockButton_clicked(bool checked);
     void on_programKpButton_clicked(bool checked);

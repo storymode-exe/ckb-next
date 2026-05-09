@@ -234,9 +234,17 @@ void KbBind::update(QFile& cmd, int notify, bool force){
         QString value = act->driverName();
         QByteArray keyLatin1 = key.toLatin1();
         if(value.isEmpty()){
-            // If the key is unbound or is a special action, unbind it
-            cmd.write(" unbind ");
-            cmd.write(keyLatin1);
+            if(act->isPassthrough()){
+                // Passthrough: keep key's default function while GUI handles mode switch
+                cmd.write(" bind ");
+                cmd.write(keyLatin1);
+                cmd.write(":");
+                cmd.write(keyLatin1);
+            } else {
+                // If the key is unbound or is a special action, unbind it
+                cmd.write(" unbind ");
+                cmd.write(keyLatin1);
+            }
             // if a macro definiton for the key is given,
             // add the converted string to key-buffer "macro"
             if (act->isMacro() && act->macroContent().length() > 0) {

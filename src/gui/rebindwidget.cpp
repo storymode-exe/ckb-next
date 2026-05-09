@@ -331,6 +331,8 @@ void RebindWidget::setSelection(const QStringList& newSelection, bool applyPrevi
         ui->modeWrapBox->setChecked(true);
         if(sAction == "mode"){
             ui->modeWrapBox->setChecked(true);
+            ui->modeReleaseBox->setChecked(false);
+            ui->modePassthroughBox->setChecked(act.isPassthrough());
             if(param == KeyAction::MODE_PREV_WRAP)
                 param = KeyAction::MODE_PREV;
             else if(param == KeyAction::MODE_NEXT_WRAP)
@@ -343,6 +345,17 @@ void RebindWidget::setSelection(const QStringList& newSelection, bool applyPrevi
                 ui->modeBox->setCurrentIndex(param);
             else
                 // 0 -> "", 1 -> Prev, 2 -> Next, 3 -> Mode 1
+                ui->modeBox->setCurrentIndex(3);
+        } else if(sAction == "moderelease"){
+            ui->modeReleaseBox->setChecked(true);
+            ui->modeWrapBox->setChecked(false);
+            ui->modeWrapBox->hide();
+            ui->modePassthroughBox->setChecked(act.isPassthrough());
+            // Absolute mode only — param is 0-based index
+            int idx = param + 3;
+            if(idx >= 0 && idx < ui->modeBox->count())
+                ui->modeBox->setCurrentIndex(idx);
+            else
                 ui->modeBox->setCurrentIndex(3);
         } else if (sAction == "macro") {
             ui->tabWidget->setCurrentIndex(TAB_MACRO);
@@ -436,8 +449,13 @@ void RebindWidget::applyChanges(const QStringList& keys, bool doUnbind){
         bind->setAction(keys, wheelKeys[ui->wheelBox->currentIndex() - 1]);
     else if(ui->dpiBox->currentIndex() > 0)
         bind->setAction(keys, KeyAction::dpiAction(ui->dpiBox->currentIndex() - DPI_OFFSET, ui->dpiCustXBox->value(), ui->dpiCustYBox->value()));
-    else if(ui->modeBox->currentIndex() > 0)
-        bind->setAction(keys, KeyAction::modeAction(ui->modeBox->currentIndex() - 3 - (ui->modeWrapBox->isChecked() && ui->modeBox->currentIndex() < 3 ? 2 : 0)));
+    else if(ui->modeBox->currentIndex() > 0){
+        bool pt = ui->modePassthroughBox->isChecked();
+        if(ui->modeReleaseBox->isChecked() && ui->modeBox->currentIndex() > 0)
+            bind->setAction(keys, KeyAction::modeReleaseAction(ui->modeBox->currentIndex() - 3, pt));
+        else
+            bind->setAction(keys, KeyAction::modeAction(ui->modeBox->currentIndex() - 3 - (ui->modeWrapBox->isChecked() && ui->modeBox->currentIndex() < 3 ? 2 : 0), pt));
+    }
     else if(ui->lightBox->currentIndex() > 0)
         bind->setAction(keys, KeyAction::lightAction(ui->lightBox->currentIndex() - 1 + (ui->lightWrapBox->isChecked() ? 2 : 0)));
     else if(ui->lockBox->currentIndex() > 0)
@@ -637,7 +655,7 @@ void RebindWidget::on_dpiBox_currentIndexChanged(int index){
 }
 
 void RebindWidget::on_modeBox_currentIndexChanged(int index){
-    if(index == 1 || index == 2)
+    if((index == 1 || index == 2) && !ui->modeReleaseBox->isChecked())
         ui->modeWrapBox->show();
     else
         ui->modeWrapBox->hide();
@@ -724,6 +742,22 @@ void RebindWidget::on_mediaButton_clicked(bool checked){
 void RebindWidget::on_modeButton_clicked(bool checked){
     if(checked && ui->modeBox->currentIndex() == 0)
         ui->modeBox->setCurrentIndex(1);
+    else if(!checked)
+        ui->modeBox->setCurrentIndex(0);
+}
+
+void RebindWidget::on_modeReleaseBox_stateChanged(int state){
+    int index = ui->modeBox->currentIndex();
+    if(state == Qt::Checked){
+        // Hold mode: hide wrap (prev/next wrap not supported), force to absolute mode
+        ui->modeWrapBox->hide();
+        if(index == 1 || index == 2)
+            ui->modeBox->setCurrentIndex(3); // default to Mode 1
+    } else {
+        // Normal toggle mode: show wrap if prev/next
+        if(index == 1 || index == 2)
+            ui->modeWrapBox->show();
+    }
 }
 
 void RebindWidget::on_lightButton_clicked(bool checked){
