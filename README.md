@@ -1,4 +1,4 @@
-# ckb-next — Mode Shift Fork
+# ckb-next — Mode Shift Enhanced Fork
 
 A fork of [ckb-next](https://github.com/ckb-next/ckb-next) adding **hold-to-shift mode** functionality to the Special binding tab.
 
@@ -55,6 +55,37 @@ Hold Alt → flight mode colors. Release → back to normal. Alt still works in-
 ![Special tab showing new checkboxes](screenshots/mode_shift_1.png)
 
 ![Mode shift in action](screenshots/mode_shift_2.png)
+
+---
+
+## Installation
+
+### Option 1: Pre-built Binary (easiest)
+
+**Requirements:** ckb-next must already be installed on your system (for the daemon).
+
+1. Download `ckb-next-v0.6.2-modeshift_enhanced-x86_64.tar.gz` from the [latest release](https://github.com/storymode-exe/ckb-next/releases/latest)
+2. Extract it:
+   ```bash
+   tar -xzf ckb-next-v0.6.2-modeshift_enhanced-x86_64.tar.gz
+   ```
+3. Stop the current ckb-next GUI:
+   ```bash
+   pkill ckb-next
+   ```
+4. Run the new binary directly:
+   ```bash
+   ./ckb-next --background
+   ```
+   Or replace your existing installation:
+   ```bash
+   sudo cp ckb-next /usr/bin/ckb-next
+   ckb-next --background
+   ```
+
+> **Note:** This is an x86_64 binary built on Fedora 43. It should work on most modern Linux distros. The ckb-next **daemon** from your distro's package is still required and does not need to be replaced.
+
+> **Bazzite/Fedora Atomic users:** `/usr/bin` is immutable. Copy the binary to `~/.local/bin/ckb-next` instead and update your autostart entry.
 
 ---
 
