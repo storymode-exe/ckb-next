@@ -1,46 +1,124 @@
-# ckb-next: RGB Driver for Linux
+# ckb-next — Mode Shift Fork
 
-<a target="_blank" href="https://web.libera.chat/?channels=#ckb-next"><img src="https://img.shields.io/badge/%23irc-libera.chat-blue.svg" height="20" alt="irc.libera.chat #ckb-next" /></a>
+A fork of [ckb-next](https://github.com/ckb-next/ckb-next) adding **hold-to-shift mode** functionality to the Special binding tab.
 
-**ckb-next** is an open-source driver for Corsair keyboards and mice. It aims to bring the features of Corsair's proprietary CUE software to Linux operating systems. This project is currently a work in progress, but it already supports much of the same functionality, including full RGB animations. More features are coming soon. Testing and bug reports are appreciated!
+> **Base version:** ckb-next v0.6.2  
+> **Fork by:** [storymode-exe](https://github.com/storymode-exe)
 
-> __DISCLAIMER__: ckb-next is not an official Corsair product. It is licensed under the GNU General Public License (version 2) in the hope that it will be useful, but with NO WARRANTY of any kind.
+---
 
-![Screenshot](https://i.imgur.com/zMK9jOP.png)
+## What's New
 
-Major features:
+### Trigger on Release
+Bind a key to switch modes **on key release** instead of key press.
 
-- Control multiple devices independently
-- United States and European keyboard layouts
-- Customizable key bindings
-- Per-key lighting and animation
-- Reactive lighting
-- Multiple profiles/modes with hardware save function
-- Adjustable mouse DPI with ability to change DPI on button press
+### Retain Original Key Function
+Check this to keep the key's original function while also switching modes — the key still types/acts normally, it *also* switches modes.
 
-### Important information regarding macOS
-macOS is no longer officially supported. For more information, please refer to [issue #660](https://github.com/ckb-next/ckb-next/issues/660).
+### Fixed: Unchecking Mode Clears Binding
+Previously, unchecking "Switch to mode" and clicking Apply would leave the old binding in place. Now it properly clears.
 
-### General information
+---
 
-Most of the information can be found on [ckb-next wiki pages](https://github.com/ckb-next/ckb-next/wiki).
+## Hold-to-Shift Mode Behavior
 
-[Supported devices](https://github.com/ckb-next/ckb-next/wiki/Supported-Hardware).
+The combination of these two options enables **hold-to-shift** — a key that temporarily shifts to a different mode while held, and reverts when released:
 
-[Linux Installation](https://github.com/ckb-next/ckb-next/wiki/Linux-Installation).
+**Mode A** — bind your key to:
+- Switch to Mode B
+- ✅ Retain original key function
 
-[Troubleshooting](https://github.com/ckb-next/ckb-next/wiki/Troubleshooting).
+**Mode B** — bind the same key to:
+- Switch to Mode A
+- ✅ Trigger on release
+- ✅ Retain original key function
 
-[Known Issues](https://github.com/ckb-next/ckb-next/wiki/Known-issues).
+Now holding the key shifts to Mode B. Releasing it shifts back to Mode A. The key still works normally the whole time.
 
-[Contributing](https://github.com/ckb-next/ckb-next/wiki/Contributing).
+### Star Citizen Example
+- **Mode 1** — Default SC lighting
+- **Mode 2** — Flight mode (highlights WASD, QE, flight keys)
 
-[Community Pipe Animation Scripts](https://github.com/ckb-next/ckb-next/wiki/Community-Pipe-Scripts).
+Bind **Left Alt** in Mode 1: Switch to Mode 2, on press, retain function  
+Bind **Left Alt** in Mode 2: Switch to Mode 1, on release, retain function
 
-### Contact
+Hold Alt → flight mode colors. Release → back to normal. Alt still works in-game throughout.
 
-Maintainers reserve the rights to modify and remove issues, pull requests and comments therein, that are denunciating, off-topic, harmful, hateful and overall inappropriate.
-Please be appreciative, humble and kind to each other.
+---
 
-* IRC chat: `#ckb-next` channel at [irc.libera.chat](https://web.libera.chat/?channels=#ckb-next)
-* [GitHub Issues](https://github.com/ckb-next/ckb-next/issues)
+## Screenshots
+
+<!-- Add screenshots here after building -->
+
+**Special tab — new options:**
+
+![Special tab showing new checkboxes](screenshots/mode_shift_1.png)
+
+![Mode shift in action](screenshots/mode_shift_2.png)
+
+---
+
+## Building from Source
+
+### Requirements
+- cmake
+- gcc / g++
+- Qt6 development packages
+- libusb1
+- systemd (libudev)
+- zlib
+- QuaZip (Qt6)
+- xcb-util-wm
+- wayland-protocols
+
+### Fedora / Bazzite (via distrobox)
+
+```bash
+# Create a build container
+distrobox create --name ckb-dev --image fedora:43
+distrobox enter ckb-dev
+
+# Install dependencies
+sudo dnf install -y cmake gcc-c++ qt6-qtbase-devel qt6-qttools-devel \
+    libusb1-devel systemd-devel zlib-devel git \
+    quazip-qt6-devel xcb-util-wm-devel wayland-protocols-devel
+
+# Clone and build
+git clone https://github.com/storymode-exe/ckb-next
+cd ckb-next
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make -j$(nproc)
+```
+
+The GUI binary will be at `build/bin/ckb-next`.
+
+### Installing
+
+The ckb-next **daemon** (`ckb-next-daemon`) handles USB communication and runs as a system service. You only need to replace the **GUI** binary — the daemon from your distro's package is compatible.
+
+```bash
+# Stop the current GUI
+pkill ckb-next
+
+# Copy the new binary (adjust path as needed)
+sudo cp build/bin/ckb-next /usr/bin/ckb-next
+
+# Restart
+ckb-next --background
+```
+
+> **Bazzite note:** `/usr` is immutable. Copy the binary to `~/.local/bin/` instead and update your autostart entry.
+
+---
+
+## Upstream
+
+This fork tracks [ckb-next/ckb-next](https://github.com/ckb-next/ckb-next) at v0.6.2.  
+A PR to upstream is planned once the feature is stable.
+
+---
+
+## License
+
+GPL v2 — same as upstream ckb-next.
