@@ -1,4 +1,4 @@
-# ckb-next — Mode Shift Enhanced Fork
+# ckb-next — Mode Shift Fork
 
 A fork of [ckb-next](https://github.com/ckb-next/ckb-next) adding **hold-to-shift mode** functionality to the Special binding tab.
 
@@ -103,9 +103,9 @@ Hold Alt → flight mode colors. Release → back to normal. Alt still works in-
 
 ---
 
-## Option 2: Arch Linux (PKGBUILD)
+## Option 2: Arch / CachyOS / Manjaro (PKGBUILD)
 
-Builds from source using your system's own libraries — no version mismatch issues.
+Builds from source using your system's own libraries — no version mismatch issues. No prior ckb-next installation needed.
 
 ```bash
 git clone https://github.com/storymode-exe/ckb-next
@@ -113,11 +113,13 @@ cd ckb-next/packages
 makepkg -si
 ```
 
-This installs everything including the daemon, autostart, and animations in the right places automatically.
+This installs everything — daemon, GUI, animations, autostart — in one step.
 
 ---
 
-## Option 3: Fedora / Bazzite (RPM)
+## Option 3: Fedora (standard, non-Atomic only)
+
+> **Bazzite / Fedora Atomic users:** Your OS is immutable — RPMs cannot install to `/usr` normally. Use the **pre-built binary** option above instead.
 
 Build an RPM from the included SPEC file:
 
@@ -143,6 +145,8 @@ rpmbuild -ba ~/rpmbuild/SPECS/ckb-next-modeshift.spec
 # Install it
 sudo dnf install ~/rpmbuild/RPMS/x86_64/ckb-next-modeshift-*.rpm
 ```
+
+This installs everything — daemon, GUI, animations, autostart — in one step. No prior ckb-next installation needed.
 
 ---
 
