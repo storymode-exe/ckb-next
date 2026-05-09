@@ -1,4 +1,4 @@
-# ckb-next — Mode Shift Fork
+# ckb-next — Mode Shift Enhanced Fork
 
 A fork of [ckb-next](https://github.com/ckb-next/ckb-next) adding **hold-to-shift mode** functionality to the Special binding tab.
 
