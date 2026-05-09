@@ -121,32 +121,15 @@ This installs everything — daemon, GUI, animations, autostart — in one step.
 
 > **Bazzite / Fedora Atomic users:** Your OS is immutable — RPMs cannot install to `/usr` normally. Use the **pre-built binary** option above instead.
 
-Build an RPM from the included SPEC file:
+Download `ckb-next-modeshift-0.6.2-1.fc43.x86_64.rpm` from the [latest release](https://github.com/storymode-exe/ckb-next/releases/latest) and install it:
 
 ```bash
-# Install build tools
-sudo dnf install -y rpm-build rpmdevtools
-
-# Set up build tree
-rpmdev-setuptree
-
-# Copy the spec file
-cp packages/ckb-next-modeshift.spec ~/rpmbuild/SPECS/
-
-# Download source
-spectool -g -R ~/rpmbuild/SPECS/ckb-next-modeshift.spec
-
-# Install build dependencies
-sudo dnf builddep ~/rpmbuild/SPECS/ckb-next-modeshift.spec
-
-# Build the RPM
-rpmbuild -ba ~/rpmbuild/SPECS/ckb-next-modeshift.spec
-
-# Install it
-sudo dnf install ~/rpmbuild/RPMS/x86_64/ckb-next-modeshift-*.rpm
+sudo dnf install ckb-next-modeshift-0.6.2-1.fc43.x86_64.rpm
 ```
 
 This installs everything — daemon, GUI, animations, autostart — in one step. No prior ckb-next installation needed.
+
+> If you prefer to build the RPM yourself from source, the SPEC file is available in the `packages/` folder of the repository.
 
 ---
 
