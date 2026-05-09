@@ -48,24 +48,18 @@ New features in the Special binding tab:
 %cmake_install
 
 %files
-%license COPYING
 %doc README.md
 /usr/bin/ckb-next
 /usr/bin/ckb-next-daemon
+/usr/bin/ckb-next-dev-detect
 /usr/libexec/ckb-next-animations/
+/usr/libexec/ckb-next-sinfo
 /usr/share/applications/ckb-next.desktop
 /usr/share/icons/hicolor/*/apps/ckb-next*
-/usr/lib/systemd/system/ckb-next-daemon.service
-/etc/xdg/autostart/ckb-next.autostart.desktop
-
-%post
-%systemd_post ckb-next-daemon.service
-
-%preun
-%systemd_preun ckb-next-daemon.service
-
-%postun
-%systemd_postun_with_restart ckb-next-daemon.service
+/usr/share/icons/hicolor/*/status/ckb-next*
+/usr/lib64/cmake/ckb-next/
+/lib/udev/rules.d/99-ckb-next-daemon.rules
+/etc/xdg/autostart/ckb-next.desktop
 
 %changelog
 * %(date "+%a %b %d %Y") storymode-exe <story.mode@icloud.com> - 0.6.2-1
